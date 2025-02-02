@@ -1463,7 +1463,7 @@ static void namespace_unlock(void)
 	if (likely(hlist_empty(&head)))
 		return;
 
-	synchronize_rcu();
+	synchronize_rcu_expedited();
 
 	group_pin_kill(&head);
 }
@@ -1730,7 +1730,6 @@ static inline bool may_mandlock(void)
 }
 #endif
 
-#ifdef CONFIG_KSU
 /*
  * path_mounted - check whether path is mounted
  * @path: path to check
@@ -1777,7 +1776,6 @@ int path_umount(struct path *path, int flags)
 	mntput_no_expire(mnt);
 	return ret;
 }
-#endif
 
 /*
  * Now umount can handle mount points as well as block devices.

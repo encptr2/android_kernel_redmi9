@@ -2284,7 +2284,9 @@ static int smb1351_set_usbchg_current(struct charger_device *chg_dev, u32 uA)
 	u8 reg = 0, mask = 0;
 	u32 current_ma = uA / 1000;
 
+#ifdef CONFIG_MTK_ENG_BUILD
 	pr_err("USB current_ma = %d\n", current_ma);
+#endif
 
 	if (chip->chg_autonomous_mode) {
 		pr_debug("Charger in autonomous mode\n");
@@ -2383,12 +2385,16 @@ static int smb1351_set_fastchg_current(struct charger_device *chg_dev, u32 uA)
 
 	chip->chg_current_set = uA / 1000;
 
+#ifdef CONFIG_MTK_ENG_BUILD
 	pr_err("fastchg current mA=%d \n", chip->chg_current_set);
+#endif
 
 	if ((chip->chg_current_set < SMB1351_CHG_PRE_MIN_MA) ||
 		(chip->chg_current_set > SMB1351_CHG_FAST_MAX_MA)) {
+#ifdef CONFIG_MTK_ENG_BUILD
 		pr_err("bad pre_fastchg current mA=%d asked to set\n",
 					chip->chg_current_set);
+#endif
 		return -EINVAL;
 	}
 
@@ -2467,7 +2473,7 @@ static int smb1351_plug_out(struct charger_device *chg_dev)
 {
 	struct smb1351_charger *chip = dev_get_drvdata(&chg_dev->dev);
 //	struct charger_manager *cm = chip->chg_consumer->cm;
-	int rc;
+//	int rc;
 	pr_err("%s \n", __func__);
 
 	chip->hvdcp_type = HVDCP_NULL;
@@ -2484,8 +2490,8 @@ static int smb1351_plug_out(struct charger_device *chg_dev)
 	cancel_delayed_work_sync(&chip->hvdcp_500_mode_check_work);
 	/* Disable SW conn therm Regulation */
 //	rc = smblib_set_sw_conn_therm_regulation(chip, false);
-	if (rc < 0)
-		pr_err("Couldn't stop SW conn therm rc=%d\n", rc);
+//	if (rc < 0)
+//		pr_err("Couldn't stop SW conn therm rc=%d\n", rc);
 
 	return 0;
 }
